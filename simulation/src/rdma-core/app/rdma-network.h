@@ -143,6 +143,7 @@ private:
   void BuildRoute(Ptr<Node> node);
   void BuildP2pInfo();
   void BuildGroups();
+  void EnableTracing();
 
 private:
   //! If the singleton is initialized.
@@ -169,6 +170,7 @@ private:
 
   //! Note: Not sure it is usdeful as member variable.
   QbbHelper m_qbb;
+  FILE* m_trace_file;
 
   //! Stores which servers belong to which multicast groups.
 	std::map<uint32_t, std::set<node_id_t>> m_mcast_groups;

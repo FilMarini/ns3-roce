@@ -53,6 +53,14 @@ void RdmaNetwork::Initialize(const fs::path& config_path)
 	Simulator::Run();
   NS_LOG_INFO("Exit stopped at " << Simulator::Now().GetSeconds() << "s.");
 
+  // Close trace file before destroying modules
+  //auto& instance = GetInstance();
+  if (instance.m_trace_file) {
+    fclose(instance.m_trace_file);
+    instance.m_trace_file = nullptr;
+    NS_LOG_INFO("Trace file closed");
+  }
+
   // Permits to modules to get the time of the simulator, before it is destroyed.
   instance.m_modules.clear();
 
@@ -66,6 +74,46 @@ RdmaNetwork& RdmaNetwork::GetInstance()
   static RdmaNetwork instance;
   return instance;
 }
+
+void RdmaNetwork::EnableTracing()
+{
+  NS_LOG_FUNCTION(this);
+
+  // Check if tracing is enabled in config
+  // You could add a config option like "trace_file" to RdmaConfig
+  // For now, let's check if a trace file is specified:
+
+  std::string trace_filename = "rdma-packets.tr";  // Default name
+
+  // TODO: Add this to RdmaConfig JSON:
+  // if (m_config->trace_file.empty()) {
+  //   NS_LOG_INFO("Packet tracing disabled (no trace file specified)");
+  //   return;
+  // }
+  // trace_filename = m_config->FindFile(m_config->trace_file).string();
+
+  // Open trace file
+  m_trace_file = fopen(trace_filename.c_str(), "wb");
+
+  if (!m_trace_file) {
+    NS_LOG_ERROR("Cannot open trace file: " << trace_filename);
+    return;
+  }
+
+  NS_LOG_INFO("Enabling packet tracing to: " << trace_filename);
+
+  // Collect all nodes
+  NodeContainer all_nodes;
+  for (const auto& [_, node] : m_nodes) {
+    all_nodes.Add(node);
+  }
+
+  // Enable tracing using the existing QbbHelper!
+  m_qbb.EnableTracing(m_trace_file, all_nodes);
+
+  NS_LOG_INFO("Packet tracing enabled for " << all_nodes.GetN() << " nodes");
+}
+
 
 void RdmaNetwork::CreateNodes()
 {
@@ -188,6 +236,7 @@ void RdmaNetwork::InitTopology(std::shared_ptr<RdmaTopology> topology)
   InstallRdma();
   BuildRoutes();
   BuildGroups();
+  EnableTracing();
 }
 
 void RdmaNetwork::InitModules()
