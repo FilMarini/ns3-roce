@@ -122,6 +122,9 @@ public:
     //! Path of the JSON file that stores all the flows to simulate.
 	fs::path flows_file;
 
+    //! Path of the JSON file that stores all the traces.
+	fs::path trace_file;
+
     //! If true, ACKs use PFC flow index zero which is the highest priority.
     //! Otherwise, ACKs use the default flow index 3.
 	bool ack_high_prio{false};

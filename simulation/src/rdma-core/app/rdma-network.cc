@@ -83,14 +83,11 @@ void RdmaNetwork::EnableTracing()
   // You could add a config option like "trace_file" to RdmaConfig
   // For now, let's check if a trace file is specified:
 
-  std::string trace_filename = "rdma-packets.tr";  // Default name
-
-  // TODO: Add this to RdmaConfig JSON:
-  // if (m_config->trace_file.empty()) {
-  //   NS_LOG_INFO("Packet tracing disabled (no trace file specified)");
-  //   return;
-  // }
-  // trace_filename = m_config->FindFile(m_config->trace_file).string();
+  if (m_config->trace_file.empty()) {
+    NS_LOG_INFO("Packet tracing disabled (no trace file specified)");
+    return;
+  }
+  std::string trace_filename = m_config->FindFile(m_config->trace_file).string();
 
   // Open trace file
   m_trace_file = fopen(trace_filename.c_str(), "wb");
