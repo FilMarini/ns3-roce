@@ -168,6 +168,9 @@ bool SwitchMmu::ShouldSendCN(uint32_t ifindex, uint32_t qIndex)
 	if (qIndex == 0) {
 		return false;
 	}
+  //std::cout << "egress_bytes[" << ifindex << "][" << qIndex << "]: " << egress_bytes[ifindex][qIndex] << std::endl;
+  //std::cout <<"kmax[" << ifindex << "]: " << kmax[ifindex] << std::endl;
+  //std::cout <<"kmin[" << ifindex << "]: " << kmin[ifindex] << std::endl;
 	if (egress_bytes[ifindex][qIndex] > kmax[ifindex]) {
 		NS_LOG_LOGIC("ECN should send: " << egress_bytes[ifindex][qIndex] << "/" << kmin[ifindex]);
 		return true;
@@ -182,6 +185,8 @@ bool SwitchMmu::ShouldSendCN(uint32_t ifindex, uint32_t qIndex)
 	return false;
 }
 void SwitchMmu::ConfigEcn(uint32_t port, uint32_t _kmin, uint32_t _kmax, double _pmax){
+	//kmin[port] = _kmin * 1000;
+	//kmax[port] = _kmax * 1000;
 	kmin[port] = _kmin * 1000;
 	kmax[port] = _kmax * 1000;
 	pmax[port] = _pmax;

@@ -560,6 +560,8 @@ void RdmaReliableRQ::ReceiveAck(Ptr<Packet> p, const CustomHeader &ch)
 	NS_ASSERT(cc == 1);
 	
 	if (cnp){
+    NS_LOG_INFO("Received CNP");
+    std::cout << "Received CNP" << std::endl;
 		m_tx->LazyInitCnp();
 		rdma->cnp_received_mlx(m_tx);
 	}

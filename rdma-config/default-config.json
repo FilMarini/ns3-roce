@@ -43,26 +43,26 @@
       "bandwidth_bps": 25e9,
       "min_buf_bytes": 100e3,
       "max_buf_bytes": 400e3,
-      "max_probability": 0.2
+      "max_probability": 0.9
     },
     {
       "bandwidth_bps": 50e9,
       "min_buf_bytes": 200e3,
       "max_buf_bytes": 800e3,
-      "max_probability": 0.2
+      "max_probability": 0.9
     },
     {
       "bandwidth_bps": 100e9,
       "min_buf_bytes": 400e3,
       "max_buf_bytes": 1600e3,
-      "max_probability": 0.2
+      "max_probability": 0.9
     }
   ],
 
   "modules": [
     {
       "path": "ns3::SwitchBufferMonitor",
-      "enable": false,
+      "enable": true,
       "attributes": {
         "AvroOutputFile": "out_sw_mem.avro",
         "StartTime": 0,
@@ -72,7 +72,7 @@
     },
     {
       "path": "ns3::QpMonitor",
-      "enable": false,
+      "enable": true,
       "attributes": {
         "AvroOutputFile": "out_qp.avro",
         "StartTime": 0,
@@ -96,9 +96,9 @@
     },
     {
       "path": "ns3::TxMonitor",
-      "enable": false,
+      "enable": true,
       "attributes": {
-        "AvroOutputFile": "out_link_bytes.avro"
+        "AvroOutputFile": "rdma-config/out/out_link_bytes.avro"
       }
     }
   ]

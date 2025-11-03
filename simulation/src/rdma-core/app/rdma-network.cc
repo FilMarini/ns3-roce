@@ -346,7 +346,7 @@ NetDeviceContainer RdmaNetwork::GetAllQbbNetDevices() const
   }
 
   // Each node should have exactly one net device!
-  NS_ABORT_IF(res.GetN() != m_nodes.size());
+  //NS_ABORT_IF(res.GetN() != m_nodes.size());
 
   return res;
 }

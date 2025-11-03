@@ -4,6 +4,7 @@
   "fields" : [
       {"name": "src", "type": "int"},
       {"name": "dst", "type": "int"},
+      {"name": "time", "type" : "double"},
       {"name": "bytes", "type" : "long"}
   ]
 }

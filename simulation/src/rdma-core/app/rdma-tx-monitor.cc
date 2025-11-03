@@ -33,11 +33,22 @@ void TxMonitor::OnModuleLoaded(RdmaNetwork& network)
     m_avro_out_fullpath = network.GetConfig().FindFile(m_avro_out);
     
     NetDeviceContainer devs = network.GetAllQbbNetDevices();
-    const size_t node_count{devs.GetN()};
+    //const size_t node_count{devs.GetN()};
 
-    m_txrx_bytes.resize(node_count);
+    // Find the maximum node ID
+    uint32_t max_node_id = 0;
+    for (uint32_t i = 0; i < devs.GetN(); ++i) {
+      uint32_t node_id = devs.Get(i)->GetNode()->GetId();
+      if (node_id > max_node_id) {
+        max_node_id = node_id;
+      }
+    }
+    // Size the matrix to accommodate the highest node ID
+    const size_t matrix_size = max_node_id + 1;
+
+    m_txrx_bytes.resize(matrix_size);
     for(auto& v : m_txrx_bytes) {
-        v.resize(node_count);
+        v.resize(matrix_size);
     }
 
     const char* const callback_path{"/ChannelList/*/TxRxPointToPoint"};
@@ -67,6 +78,7 @@ TxMonitor::~TxMonitor()
             TxRecord record;
             record.src = tx_i;
             record.dst = rx_i;
+            record.time = Simulator::Now().GetSeconds();
             record.bytes = m_txrx_bytes[tx_i][rx_i];
             
             // Save only where a NIC sends data, not a switch.
