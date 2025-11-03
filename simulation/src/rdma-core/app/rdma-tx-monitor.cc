@@ -78,7 +78,6 @@ TxMonitor::~TxMonitor()
             TxRecord record;
             record.src = tx_i;
             record.dst = rx_i;
-            record.time = Simulator::Now().GetSeconds();
             record.bytes = m_txrx_bytes[tx_i][rx_i];
             
             // Save only where a NIC sends data, not a switch.

@@ -33,12 +33,10 @@ namespace ns3 {
 struct TxRecord {
     int32_t src;
     int32_t dst;
-    double time;
     int64_t bytes;
     TxRecord() :
         src(int32_t()),
         dst(int32_t()),
-        time(double()),
         bytes(int64_t())
         { }
 };
@@ -49,7 +47,6 @@ template<> struct codec_traits<ns3::TxRecord> {
     static void encode(Encoder& e, const ns3::TxRecord& v) {
         avro::encode(e, v.src);
         avro::encode(e, v.dst);
-        avro::encode(e, v.time);
         avro::encode(e, v.bytes);
     }
     static void decode(Decoder& d, ns3::TxRecord& v) {
@@ -66,9 +63,6 @@ template<> struct codec_traits<ns3::TxRecord> {
                     avro::decode(d, v.dst);
                     break;
                 case 2:
-                    avro::decode(d, v.time);
-                    break;
-                case 3:
                     avro::decode(d, v.bytes);
                     break;
                 default:
@@ -78,7 +72,6 @@ template<> struct codec_traits<ns3::TxRecord> {
         } else {
             avro::decode(d, v.src);
             avro::decode(d, v.dst);
-            avro::decode(d, v.time);
             avro::decode(d, v.bytes);
         }
     }
@@ -93,7 +86,6 @@ namespace ns3 {
   "fields" : [
       {"name": "src", "type": "int"},
       {"name": "dst", "type": "int"},
-      {"name": "time", "type" : "double"},
       {"name": "bytes", "type" : "long"}
   ]
 })JSON";
