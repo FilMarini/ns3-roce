@@ -47,6 +47,7 @@ if(reflectcpp_FOUND)
       app/rdma-network.cc
       app/rdma-switch-buffer-monitor.cc
       app/rdma-qp-monitor.cc
+      app/rdma-flow-completion-monitor.cc
       helper/rdma-helper.cc
       helper/rdma-reflection-helper.cc
       model/broadcom-egress-queue.cc
@@ -81,6 +82,7 @@ if(reflectcpp_FOUND)
       serdes/generated/tx-record.h
       serdes/generated/sw-mem-record.h
       serdes/generated/qp-record.h
+      serdes/generated/flow-record.h
       app/rdma-config.h
       app/rdma-config-module.h
       app/rdma-flow.h
@@ -90,6 +92,7 @@ if(reflectcpp_FOUND)
       app/rdma-tx-monitor.h
       app/rdma-pfc-monitor.h
       app/rdma-qp-monitor.h
+      app/rdma-flow-completion-monitor.h
       app/flows/rdma-flow-unicast.h
       app/flows/rdma-flow-multicast.h
       app/flows/rdma-flow-bisection.h

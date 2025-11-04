@@ -36,6 +36,7 @@ public:
    * been registered, otherwise it will be not taken into account.
    */
   void AddFlow(Ptr<RdmaFlow> flow);
+  void AddFlowCompletionCallback(std::function<void(Ptr<RdmaFlow>)> callback);
 
   const auto& GetAllCompletionTimes() const
   {
@@ -62,6 +63,7 @@ private:
   std::unordered_map<std::string, Time> m_completion_times;
   //! Stores the name of each flow.
   std::unordered_map<Ptr<RdmaFlow>, std::string> m_names;
+  std::vector<std::function<void(Ptr<RdmaFlow>)>> m_completion_callbacks;
 };
 
 } // namespace ns3

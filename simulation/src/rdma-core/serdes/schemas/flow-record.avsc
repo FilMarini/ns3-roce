@@ -1,0 +1,16 @@
+{
+  "type": "record",
+  "name": "FlowCompletionRecord",
+  "fields" : [
+      {"name": "flow_id", "type": "string"},
+      {"name": "src", "type": "int"},
+      {"name": "dst", "type": "int"},
+      {"name": "start_time", "type": "double"},
+      {"name": "completion_time", "type": "double"},
+      {"name": "duration", "type": "double"},
+      {"name": "bytes_requested", "type": "long"},
+      {"name": "bytes_sent", "type": "long"},
+      {"name": "priority", "type": "int"},
+      {"name": "is_reliable", "type": "boolean"}
+  ]
+}

@@ -15,6 +15,11 @@ public:
     using RdmaFlow::OnComplete;
 
     static TypeId GetTypeId();
+  uint32_t GetSourceNode() const { return m_snode; }
+  uint32_t GetDestinationNode() const { return m_dnode; }
+  uint64_t GetWriteByteAmount() const { return m_bytes_to_write; }
+  uint16_t GetPriority() const { return m_priority; }
+  bool IsReliable() const { return m_reliable; }
 
 protected:
     void OnFlowStarted(RdmaNetwork& network) override;

@@ -39,7 +39,6 @@ void RdmaNetwork::Initialize(const fs::path& config_path)
   auto& instance = GetInstance();
   instance.InitConfig(config);
   instance.InitTopology(topology);
-  instance.InitModules();
 
   // Load flows.
 	instance.m_flow_scheduler = std::make_unique<FlowScheduler>(instance, config->FindFile(config->flows_file));
@@ -47,6 +46,8 @@ void RdmaNetwork::Initialize(const fs::path& config_path)
 		NS_LOG_INFO("Simulation stopped at " << Simulator::Now().GetSeconds() << "s.");
 		Simulator::Stop();
 	});
+
+  instance.InitModules();
 
   // Run the simulation.
 	NS_LOG_INFO("Running Simulation.");

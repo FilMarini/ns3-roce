@@ -74,6 +74,11 @@ void FlowScheduler::AddFlow(Ptr<RdmaFlow> flow)
   }));
 }
 
+void FlowScheduler::AddFlowCompletionCallback(std::function<void(Ptr<RdmaFlow>)> callback)
+{
+  m_completion_callbacks.push_back(callback);
+}
+
 void FlowScheduler::OnFlowFinish(Ptr<RdmaFlow> flow)
 {
   NS_LOG_INFO("Flow " << flow->GetId() << " completed at " << Simulator::Now().GetSeconds() << "s");
@@ -106,6 +111,11 @@ void FlowScheduler::OnFlowFinish(Ptr<RdmaFlow> flow)
   else {
     NS_LOG_INFO("Remains " << m_fg_running << " flows");
   }
+
+  for(auto& callback : m_completion_callbacks) {
+    callback(flow);
+  }
+
 }
 
 void FlowScheduler::RunFlow(Ptr<RdmaFlow> flow)
