@@ -1,0 +1,229 @@
+{
+  "nodes": [
+    {
+      "id": 0,
+      "is_switch": true,
+      "pos": {"x": 15.0, "y": 14}
+    },
+    {
+      "id": 1,
+      "is_switch": true,
+      "pos": {"x": 25.0, "y": 14}
+    },
+    {
+      "id": 2,
+      "is_switch": true,
+      "pos": {"x": 5.0, "y": 9}
+    },
+    {
+      "id": 3,
+      "is_switch": true,
+      "pos": {"x": 15.0, "y": 9}
+    },
+    {
+      "id": 4,
+      "is_switch": true,
+      "pos": {"x": 25.0, "y": 9}
+    },
+    {
+      "id": 5,
+      "is_switch": true,
+      "pos": {"x": 35.0, "y": 9}
+    },
+    {
+      "id": 6,
+      "is_switch": true,
+      "pos": {"x": 5, "y": 4}
+    },
+    {
+      "id": 7,
+      "is_switch": true,
+      "pos": {"x": 15, "y": 4}
+    },
+    {
+      "id": 8,
+      "is_switch": true,
+      "pos": {"x": 25, "y": 4}
+    },
+    {
+      "id": 9,
+      "is_switch": true,
+      "pos": {"x": 35, "y": 4}
+    },
+    {
+        "id": 10,
+        "is_switch": false,
+        "pos": {"x": 0, "y": 0}
+    },
+    {
+        "id": 11,
+        "is_switch": false,
+        "pos": {"x": 3, "y": 0}
+    },
+    {
+        "id": 12,
+        "is_switch": false,
+        "pos": {"x": 6, "y": 0}
+    },
+    {
+        "id": 13,
+        "is_switch": false,
+        "pos": {"x": 9, "y": 0}
+    },
+    {
+        "id": 14,
+        "is_switch": false,
+        "pos": {"x": 30, "y": 0}
+    }
+  ],
+  "groups": [],
+  "links": [
+    {
+      "src": 2,
+      "dst": 0,
+      "bandwidth": 40000000000.0,
+      "latency": 1e-06,
+      "error_rate": 0.0
+    },
+    {
+      "src": 2,
+      "dst": 1,
+      "bandwidth": 40000000000.0,
+      "latency": 1e-06,
+      "error_rate": 0.0
+    },
+    {
+      "src": 3,
+      "dst": 0,
+      "bandwidth": 40000000000.0,
+      "latency": 1e-06,
+      "error_rate": 0.0
+    },
+    {
+      "src": 3,
+      "dst": 1,
+      "bandwidth": 40000000000.0,
+      "latency": 1e-06,
+      "error_rate": 0.0
+    },
+    {
+      "src": 4,
+      "dst": 0,
+      "bandwidth": 40000000000.0,
+      "latency": 1e-06,
+      "error_rate": 0.0
+    },
+    {
+      "src": 4,
+      "dst": 1,
+      "bandwidth": 40000000000.0,
+      "latency": 1e-06,
+      "error_rate": 0.0
+    },
+    {
+      "src": 5,
+      "dst": 0,
+      "bandwidth": 40000000000.0,
+      "latency": 1e-06,
+      "error_rate": 0.0
+    },
+    {
+      "src": 5,
+      "dst": 1,
+      "bandwidth": 40000000000.0,
+      "latency": 1e-06,
+      "error_rate": 0.0
+    },
+    {
+      "src": 2,
+      "dst": 6,
+      "bandwidth": 40000000000.0,
+      "latency": 1e-06,
+      "error_rate": 0.0
+    },
+    {
+      "src": 2,
+      "dst": 7,
+      "bandwidth": 40000000000.0,
+      "latency": 1e-06,
+      "error_rate": 0.0
+    },
+      {
+      "src": 3,
+      "dst": 6,
+      "bandwidth": 40000000000.0,
+      "latency": 1e-06,
+      "error_rate": 0.0
+    },
+    {
+      "src": 3,
+      "dst": 7,
+      "bandwidth": 40000000000.0,
+      "latency": 1e-06,
+      "error_rate": 0.0
+    },
+    {
+      "src": 4,
+      "dst": 8,
+      "bandwidth": 40000000000.0,
+      "latency": 1e-06,
+      "error_rate": 0.0
+    },
+    {
+      "src": 5,
+      "dst": 8,
+      "bandwidth": 40000000000.0,
+      "latency": 1e-06,
+      "error_rate": 0.0
+    },
+      {
+      "src": 4,
+      "dst": 9,
+      "bandwidth": 40000000000.0,
+      "latency": 1e-06,
+      "error_rate": 0.0
+    },
+    {
+      "src": 5,
+      "dst": 9,
+      "bandwidth": 40000000000.0,
+      "latency": 1e-06,
+      "error_rate": 0.0
+    },
+      {
+          "src": 10,
+          "dst": 6,
+          "bandwidth": 40000000000.0,
+          "latency": 1e-06,
+          "error_rate": 0.0
+      },
+      {
+          "src": 11,
+          "dst": 7,
+          "bandwidth": 40000000000.0,
+          "latency": 1e-06,
+          "error_rate": 0.0
+      },
+      {
+          "src": 12,
+          "dst": 8,
+          "bandwidth": 40000000000.0,
+          "latency": 1e-06,
+          "error_rate": 0.0
+      },
+      {
+      "src": 13,
+      "dst": 9,
+      "bandwidth": 40000000000.0,
+      "latency": 1e-06,
+      "error_rate": 0.0
+    },
+    {
+      "src": 14,
+      "dst": 9,
+      "bandwidth": 40000000000.0,
+      "latency": 1e-06,
+      "error_rate": 0.0
+    }
+  ]
+}

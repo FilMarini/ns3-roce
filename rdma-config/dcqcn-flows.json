@@ -1,0 +1,64 @@
+{
+  "flows": [
+    {
+      "id": "H1",
+      "path": "ns3::RdmaFlowUnicast",
+      "enable": true,
+      "start_time": 0.0,
+      "in_background": false,
+      "dependencies": [],
+      "attributes": {
+        "SourceNode": 10,
+        "DestinationNode": 14,
+        "WriteByteAmount": 4e6,
+        "PfcPriority": 3,
+        "IsReliable": true
+      }
+    },
+    {
+      "id": "H2",
+      "path": "ns3::RdmaFlowUnicast",
+      "enable": true,
+      "start_time": 0.0,
+      "in_background": false,
+      "dependencies": [],
+      "attributes": {
+        "SourceNode": 11,
+        "DestinationNode": 14,
+        "WriteByteAmount": 4e6,
+        "PfcPriority": 3,
+        "IsReliable": true
+      }
+    },
+    {
+      "id": "H3",
+      "path": "ns3::RdmaFlowUnicast",
+      "enable": true,
+      "start_time": 0.0,
+      "in_background": false,
+      "dependencies": [],
+      "attributes": {
+        "SourceNode": 12,
+        "DestinationNode": 14,
+        "WriteByteAmount": 4e6,
+        "PfcPriority": 3,
+        "IsReliable": true
+      }
+    },
+    {
+      "id": "H4",
+      "path": "ns3::RdmaFlowUnicast",
+      "enable": true,
+      "start_time": 0.0,
+      "in_background": false,
+      "dependencies": [],
+      "attributes": {
+        "SourceNode": 13,
+        "DestinationNode": 14,
+        "WriteByteAmount": 4e6,
+        "PfcPriority": 3,
+        "IsReliable": true
+      }
+    }
+  ]
+}
