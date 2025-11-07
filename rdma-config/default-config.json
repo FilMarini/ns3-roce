@@ -102,6 +102,16 @@
       }
     },
       {
+          "path": "ns3::ThroughputMonitor",
+          "enable": true,
+          "attributes": {
+              "AvroOutputFile": "out/out_throughput.avro",
+              "StartTime": "0",
+              "StopTime": "1e9",
+              "IntervalTime": "1e-4"
+          }
+      },
+      {
       "path": "ns3::FlowCompletionMonitor",
       "enable": true,
       "attributes": {

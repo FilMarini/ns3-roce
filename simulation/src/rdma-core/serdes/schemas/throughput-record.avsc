@@ -1,0 +1,31 @@
+{
+  "type": "record",
+  "name": "ThroughputRecord",
+  "fields": [
+    {
+      "name": "time",
+      "type": "double",
+      "doc": "Simulation time in seconds when this measurement was taken"
+    },
+    {
+      "name": "src",
+      "type": "int",
+      "doc": "Source node ID"
+    },
+    {
+      "name": "dst",
+      "type": "int",
+      "doc": "Destination node ID"
+    },
+    {
+      "name": "bytes_delta",
+      "type": "long",
+      "doc": "Number of bytes transmitted in this sampling interval"
+    },
+    {
+      "name": "throughput_gbps",
+      "type": "double",
+      "doc": "Calculated throughput in Gigabits per second"
+    }
+  ]
+}
