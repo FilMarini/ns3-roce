@@ -22,6 +22,24 @@ except ImportError:
     print("Install it with: pip install avro-python3")
     sys.exit(1)
 
+try:
+    from tqdm import tqdm
+except ImportError:
+    print("Warning: tqdm package not found. Progress bars will be disabled.")
+    print("Install it with: pip install tqdm")
+    # Fallback: create a no-op tqdm
+    class tqdm:
+        def __init__(self, iterable=None, **kwargs):
+            self.iterable = iterable
+        def __iter__(self):
+            return iter(self.iterable) if self.iterable else iter([])
+        def __enter__(self):
+            return self
+        def __exit__(self, *args):
+            pass
+        def update(self, n=1):
+            pass
+
 
 def read_avro_file(filepath: str) -> List[Dict]:
     """Read Avro file and return list of records."""
@@ -29,8 +47,24 @@ def read_avro_file(filepath: str) -> List[Dict]:
     try:
         with open(filepath, 'rb') as f:
             reader = avro.datafile.DataFileReader(f, avro.io.DatumReader())
-            for record in reader:
-                records.append(record)
+            
+            # Try to get file size for progress bar
+            try:
+                file_size = Path(filepath).stat().st_size
+                with tqdm(total=file_size, unit='B', unit_scale=True, 
+                         desc="Reading Avro file") as pbar:
+                    last_pos = 0
+                    for record in reader:
+                        records.append(record)
+                        # Update progress based on file position
+                        current_pos = f.tell()
+                        pbar.update(current_pos - last_pos)
+                        last_pos = current_pos
+            except:
+                # Fallback: just show record count
+                for record in tqdm(reader, desc="Reading Avro records", unit=" records"):
+                    records.append(record)
+            
             reader.close()
     except FileNotFoundError:
         print(f"Error: File '{filepath}' not found.")
@@ -44,9 +78,11 @@ def read_avro_file(filepath: str) -> List[Dict]:
 
 def records_to_dataframe(records: List[Dict]) -> pd.DataFrame:
     """Convert list of records to pandas DataFrame."""
+    print("Converting records to DataFrame...")
     df = pd.DataFrame(records)
     
     # Convert bytes to KB and MB
+    print("Computing derived metrics...")
     df['egress_KB'] = df['egress_bytes'] / 1024
     df['ingress_KB'] = df['ingress_bytes'] / 1024
     df['egress_MB'] = df['egress_bytes'] / (1024 * 1024)
@@ -96,7 +132,7 @@ def print_switch_summary(df: pd.DataFrame):
     print("PER-SWITCH SUMMARY")
     print("="*70)
     
-    for node in sorted(df['node'].unique()):
+    for node in tqdm(sorted(df['node'].unique()), desc="Analyzing switches", unit=" switches"):
         node_df = df[df['node'] == node]
         
         print(f"\nSwitch {node}:")
@@ -121,6 +157,7 @@ def print_port_analysis(df: pd.DataFrame, top_n: int = 10):
     print(f"TOP {top_n} MOST CONGESTED PORTS")
     print("="*70)
     
+    print("Aggregating port statistics...")
     # Calculate peak buffer usage per port
     port_stats = df.groupby('port_id').agg({
         'total_KB': ['max', 'mean', 'std'],
@@ -150,6 +187,7 @@ def detect_congestion_events(df: pd.DataFrame, threshold_kb: float = 100):
     print(f"CONGESTION EVENTS (threshold: {threshold_kb} KB)")
     print("="*70)
     
+    print("Detecting congestion events...")
     congested = df[df['total_KB'] > threshold_kb].copy()
     
     if len(congested) == 0:
@@ -181,6 +219,8 @@ def detect_congestion_events(df: pd.DataFrame, threshold_kb: float = 100):
 def plot_buffer_timeline(df: pd.DataFrame, output_file: str = None, max_ports: int = 10):
     """Plot buffer occupancy over time for each port."""
     
+    print(f"Generating buffer timeline plot for top {max_ports} ports...")
+    
     # Select top N most congested ports
     port_max = df.groupby('port_id')['total_KB'].max().sort_values(ascending=False)
     top_ports = port_max.head(max_ports).index.tolist()
@@ -190,7 +230,7 @@ def plot_buffer_timeline(df: pd.DataFrame, output_file: str = None, max_ports: i
     fig, axes = plt.subplots(3, 1, figsize=(14, 12))
     
     # Plot 1: Egress buffer over time
-    for port in top_ports:
+    for port in tqdm(top_ports, desc="Plotting egress", leave=False):
         port_data = df_plot[df_plot['port_id'] == port]
         axes[0].plot(port_data['time'], port_data['egress_KB'], 
                     label=f'Port {port}', alpha=0.7, linewidth=1)
@@ -203,7 +243,7 @@ def plot_buffer_timeline(df: pd.DataFrame, output_file: str = None, max_ports: i
     axes[0].grid(alpha=0.3)
     
     # Plot 2: Ingress buffer over time
-    for port in top_ports:
+    for port in tqdm(top_ports, desc="Plotting ingress", leave=False):
         port_data = df_plot[df_plot['port_id'] == port]
         axes[1].plot(port_data['time'], port_data['ingress_KB'], 
                     label=f'Port {port}', alpha=0.7, linewidth=1)
@@ -216,7 +256,7 @@ def plot_buffer_timeline(df: pd.DataFrame, output_file: str = None, max_ports: i
     axes[1].grid(alpha=0.3)
     
     # Plot 3: Total buffer over time
-    for port in top_ports:
+    for port in tqdm(top_ports, desc="Plotting total", leave=False):
         port_data = df_plot[df_plot['port_id'] == port]
         axes[2].plot(port_data['time'], port_data['total_KB'], 
                     label=f'Port {port}', alpha=0.7, linewidth=1)
@@ -231,8 +271,9 @@ def plot_buffer_timeline(df: pd.DataFrame, output_file: str = None, max_ports: i
     plt.tight_layout()
     
     if output_file:
+        print(f"Saving timeline plot to {output_file}...")
         plt.savefig(output_file, dpi=300, bbox_inches='tight')
-        print(f"\nBuffer timeline plot saved to: {output_file}")
+        print(f"Buffer timeline plot saved to: {output_file}")
     else:
         plt.show()
     
@@ -242,18 +283,23 @@ def plot_buffer_timeline(df: pd.DataFrame, output_file: str = None, max_ports: i
 def plot_buffer_heatmap(df: pd.DataFrame, output_file: str = None):
     """Plot heatmap of buffer occupancy across ports and time."""
     
+    print("Generating buffer heatmap...")
+    
     # Create time bins
+    print("Creating time bins...")
     time_bins = pd.cut(df['time'], bins=50)
     df_binned = df.copy()
     df_binned['time_bin'] = time_bins
     
     # Calculate average buffer usage per port per time bin
+    print("Computing heatmap data...")
     heatmap_data = df_binned.groupby(['port_id', 'time_bin'])['total_KB'].mean().unstack(fill_value=0)
     
     # Sort ports by peak usage
     port_order = df.groupby('port_id')['total_KB'].max().sort_values(ascending=False).index
     heatmap_data = heatmap_data.loc[port_order]
     
+    print("Rendering heatmap...")
     fig, ax = plt.subplots(figsize=(14, max(8, len(port_order) * 0.3)))
     
     sns.heatmap(heatmap_data, cmap='YlOrRd', cbar_kws={'label': 'Buffer Occupancy (KB)'},
@@ -271,6 +317,7 @@ def plot_buffer_heatmap(df: pd.DataFrame, output_file: str = None):
     plt.tight_layout()
     
     if output_file:
+        print(f"Saving heatmap to {output_file}...")
         plt.savefig(output_file, dpi=300, bbox_inches='tight')
         print(f"Buffer heatmap saved to: {output_file}")
     else:
@@ -282,9 +329,12 @@ def plot_buffer_heatmap(df: pd.DataFrame, output_file: str = None):
 def plot_buffer_distribution(df: pd.DataFrame, output_file: str = None):
     """Plot distribution of buffer occupancy."""
     
+    print("Generating buffer distribution plots...")
+    
     fig, axes = plt.subplots(2, 2, figsize=(14, 10))
     
     # Plot 1: Distribution of egress buffer
+    print("Plotting egress distribution...")
     axes[0, 0].hist(df['egress_KB'], bins=50, color='steelblue', 
                    alpha=0.7, edgecolor='black')
     axes[0, 0].set_xlabel('Egress Buffer (KB)')
@@ -294,6 +344,7 @@ def plot_buffer_distribution(df: pd.DataFrame, output_file: str = None):
     axes[0, 0].grid(alpha=0.3)
     
     # Plot 2: Distribution of ingress buffer
+    print("Plotting ingress distribution...")
     axes[0, 1].hist(df['ingress_KB'], bins=50, color='coral', 
                    alpha=0.7, edgecolor='black')
     axes[0, 1].set_xlabel('Ingress Buffer (KB)')
@@ -303,6 +354,7 @@ def plot_buffer_distribution(df: pd.DataFrame, output_file: str = None):
     axes[0, 1].grid(alpha=0.3)
     
     # Plot 3: Box plot per switch
+    print("Plotting per-switch boxplot...")
     df_box = df.copy()
     df_box['node_str'] = 'SW ' + df_box['node'].astype(str)
     
@@ -313,6 +365,7 @@ def plot_buffer_distribution(df: pd.DataFrame, output_file: str = None):
     axes[1, 0].get_figure().suptitle('')  # Remove automatic title
     
     # Plot 4: CDF of total buffer
+    print("Plotting CDF...")
     sorted_buffer = np.sort(df['total_KB'])
     cdf = np.arange(1, len(sorted_buffer) + 1) / len(sorted_buffer)
     
@@ -332,6 +385,7 @@ def plot_buffer_distribution(df: pd.DataFrame, output_file: str = None):
     plt.tight_layout()
     
     if output_file:
+        print(f"Saving distribution plots to {output_file}...")
         plt.savefig(output_file, dpi=300, bbox_inches='tight')
         print(f"Buffer distribution plots saved to: {output_file}")
     else:
@@ -343,11 +397,15 @@ def plot_buffer_distribution(df: pd.DataFrame, output_file: str = None):
 def export_to_csv(df: pd.DataFrame, output_file: str):
     """Export analysis to CSV files."""
     
+    print("\nExporting data to CSV files...")
+    
     # Export raw data
+    print(f"Exporting raw data...")
     df.to_csv(output_file, index=False)
-    print(f"\nRaw data exported to: {output_file}")
+    print(f"Raw data exported to: {output_file}")
     
     # Export per-port summary
+    print("Computing port summary...")
     port_summary = df.groupby('port_id').agg({
         'egress_KB': ['max', 'mean', 'std'],
         'ingress_KB': ['max', 'mean', 'std'],
@@ -364,6 +422,7 @@ def export_to_csv(df: pd.DataFrame, output_file: str):
     print(f"Port summary exported to: {port_summary_file}")
     
     # Export per-switch summary
+    print("Computing switch summary...")
     switch_summary = df.groupby('node').agg({
         'egress_KB': ['max', 'mean'],
         'ingress_KB': ['max', 'mean'],
