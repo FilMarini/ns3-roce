@@ -219,10 +219,10 @@ Ptr<Packet> RdmaReliableSQ::GetNextPacket()
 				const uint64_t rq_inc = rq_psn - info.rq_psn;
 				const int psn_percent = double(sq_psn) / rq_psn * 100.0;
 				
-				NS_LOG_DEBUG("QP " << m_dport << ": PSN: " << sq_psn << "/" << rq_psn);
-				NS_LOG_DEBUG(" (" << psn_percent << "%)");
-				NS_LOG_DEBUG(" increase: " << sq_inc << "/" << rq_inc);
-				NS_LOG_DEBUG(" at: " << Simulator::Now().GetSeconds() << std::endl);
+				//NS_LOG_DEBUG("QP " << m_dport << ": PSN: " << sq_psn << "/" << rq_psn);
+				//NS_LOG_DEBUG(" (" << psn_percent << "%)");
+				//NS_LOG_DEBUG(" increase: " << sq_inc << "/" << rq_inc);
+				//NS_LOG_DEBUG(" at: " << Simulator::Now().GetSeconds() << std::endl);
 
 				info.sq_psn = sq_psn;
 				info.rq_psn = rq_psn;
@@ -261,7 +261,7 @@ Ptr<Packet> RdmaReliableSQ::GetNextPacket()
 		bth.SetImm(sr.imm);
 	}
 	
-	NS_LOG_INFO("Sending psn=" << m_snd_nxt << ",payload_size=" << packet_size);
+	//NS_LOG_INFO("Sending psn=" << m_snd_nxt << ",payload_size=" << packet_size);
 	Ptr<Packet> p = Create<Packet>(packet_size);
 
 	// Add RdmaSeqHeader
@@ -561,7 +561,6 @@ void RdmaReliableRQ::ReceiveAck(Ptr<Packet> p, const CustomHeader &ch)
 	
 	if (cnp){
     NS_LOG_INFO("Received CNP");
-    std::cout << "Received CNP" << std::endl;
 		m_tx->LazyInitCnp();
 		rdma->cnp_received_mlx(m_tx);
 	}

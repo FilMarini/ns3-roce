@@ -50,10 +50,10 @@ bool SwitchMmu::CheckIngressAdmission(uint32_t port, uint32_t qIndex, uint32_t p
 	NS_LOG_FUNCTION(this << port << qIndex << psize);
 
 	if (psize + hdrm_bytes[port][qIndex] > headroom[port] && psize + GetSharedUsed(port, qIndex) > GetPfcThreshold(port)){
-		printf("%lu %u Drop: queue:%u,%u: Headroom full\n", Simulator::Now().GetTimeStep(), node_id, port, qIndex);
+		//printf("%lu %u Drop: queue:%u,%u: Headroom full\n", Simulator::Now().GetTimeStep(), node_id, port, qIndex);
 		for (uint32_t i = 1; i < 64; i++)
-			printf("(%u,%u)", hdrm_bytes[i][3], ingress_bytes[i][3]);
-		printf("\n");
+			//printf("(%u,%u)", hdrm_bytes[i][3], ingress_bytes[i][3]);
+      //printf("\n");
 		return false;
 	}
 	return true;
@@ -116,8 +116,8 @@ bool SwitchMmu::CheckShouldPause(uint32_t port, uint32_t qIndex)
 		return false;
 	}
 	
-	NS_LOG_DEBUG("usage: " << GetSharedUsed(port, qIndex)
-													<< "/" << GetPfcThreshold(port));
+	//NS_LOG_DEBUG("usage: " << GetSharedUsed(port, qIndex)
+	//												<< "/" << GetPfcThreshold(port));
 
 	if(hdrm_bytes[port][qIndex] > 0) {
 		NS_LOG_LOGIC("PFC headroom not empty");
@@ -125,7 +125,13 @@ bool SwitchMmu::CheckShouldPause(uint32_t port, uint32_t qIndex)
 	}
 
 	if(GetSharedUsed(port, qIndex) >= GetPfcThreshold(port)) {
-		NS_LOG_LOGIC("PFC threshold reached (" << GetSharedUsed(port, qIndex) << "/" << GetPfcThreshold(port) << ")");
+		//NS_LOG_INFO("PFC threshold reached (" << GetSharedUsed(port, qIndex) << "/" << GetPfcThreshold(port) << ")");
+    NS_LOG_INFO("Node " << node_id 
+                << " Port " << port 
+                << " Queue " << qIndex 
+                << ": PFC threshold reached (" 
+                << GetSharedUsed(port, qIndex) 
+                << "/" << GetPfcThreshold(port) << ")");
 		return true;
 	}
 
@@ -133,8 +139,8 @@ bool SwitchMmu::CheckShouldPause(uint32_t port, uint32_t qIndex)
 }
 bool SwitchMmu::CheckShouldResume(uint32_t port, uint32_t qIndex)
 {
-	NS_LOG_DEBUG("usage: " << GetSharedUsed(port, qIndex)
-													<< "/" << GetPfcThreshold(port));
+	//NS_LOG_DEBUG("usage: " << GetSharedUsed(port, qIndex)
+	//												<< "/" << GetPfcThreshold(port));
 
 	if (!paused[port][qIndex])
 		return false;

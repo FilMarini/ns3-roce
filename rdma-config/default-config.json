@@ -29,8 +29,8 @@
     "ns3::SwitchMmu::BufferSize": "12MiB"
   },
 
-  "topology_file": "default-topology.json",
-  "flows_file": "simple-flows.json",
+  "topology_file": "dcqcn-topology.json",
+  "flows_file": "dcqcn-flows.json",
   "trace_file": "out/simulation.tr",
 
   "simulator_stop_time": 0,
@@ -41,9 +41,9 @@
   "ecn": [
     {
       "bandwidth_bps": 25e9,
-      "min_buf_bytes": 100e3,
-      "max_buf_bytes": 400e3,
-      "max_probability": 0.9
+      "min_buf_bytes": 5,
+      "max_buf_bytes": 200,
+      "max_probability": 0.01
     },
     {
       "bandwidth_bps": 50e9,
@@ -64,7 +64,7 @@
       "path": "ns3::SwitchBufferMonitor",
       "enable": true,
       "attributes": {
-        "AvroOutputFile": "out_sw_mem.avro",
+        "AvroOutputFile": "out/out_sw_mem.avro",
         "StartTime": 0,
         "StopTime": 0,
         "IntervalTime": 1e-6
@@ -74,7 +74,7 @@
       "path": "ns3::QpMonitor",
       "enable": true,
       "attributes": {
-        "AvroOutputFile": "out_qp.avro",
+        "AvroOutputFile": "out/out_qp.avro",
         "StartTime": 0,
         "StopTime": 1e9,
         "IntervalTime": 1e-6
@@ -89,9 +89,9 @@
     },
     {
       "path": "ns3::PfcMonitor",
-      "enable": false,
+      "enable": true,
       "attributes": {
-        "AvroOutputFile": "out_pfc.avro"
+        "AvroOutputFile": "out/out_pfc.avro"
       }
     },
     {
@@ -99,6 +99,13 @@
       "enable": true,
       "attributes": {
         "AvroOutputFile": "rdma-config/out/out_link_bytes.avro"
+      }
+    },
+      {
+      "path": "ns3::FlowCompletionMonitor",
+      "enable": true,
+      "attributes": {
+        "AvroOutputFile": "out/out_flow.avro"
       }
     }
   ]

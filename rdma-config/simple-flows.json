@@ -10,7 +10,7 @@
       "attributes": {
 	"SourceNode": 6,
 	"DestinationNode": 7,
-	"WriteByteAmount": 1e9,
+	"WriteByteAmount": 1e6,
 	"PfcPriority": 3,
 	"IsReliable": true
       }
@@ -25,7 +25,7 @@
       "attributes": {
 	"SourceNode": 8,
 	"DestinationNode": 7,
-	"WriteByteAmount": 1e9,
+	"WriteByteAmount": 1e6,
 	"PfcPriority": 3,
 	"IsReliable": true
       }
@@ -40,7 +40,7 @@
       "attributes": {
 	"SourceNode": 9,
 	"DestinationNode": 7,
-	"WriteByteAmount": 1e9,
+	"WriteByteAmount": 1e6,
 	"PfcPriority": 3,
 	"IsReliable": true
       }
@@ -55,7 +55,7 @@
       "attributes": {
 	"SourceNode": 10,
 	"DestinationNode": 7,
-	"WriteByteAmount": 1e9,
+	"WriteByteAmount": 1e6,
 	"PfcPriority": 3,
 	"IsReliable": true
       }
@@ -70,7 +70,7 @@
       "attributes": {
 	"SourceNode": 11,
 	"DestinationNode": 7,
-	"WriteByteAmount": 1e9,
+	"WriteByteAmount": 1e6,
 	"PfcPriority": 3,
 	"IsReliable": true
       }
@@ -85,7 +85,7 @@
       "attributes": {
 	"SourceNode": 12,
 	"DestinationNode": 7,
-	"WriteByteAmount": 1e9,
+	"WriteByteAmount": 1e6,
 	"PfcPriority": 3,
 	"IsReliable": true
       }

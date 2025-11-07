@@ -376,7 +376,6 @@ void SwitchNode::SwitchNotifyDequeue(uint32_t ifIndex, uint32_t qIndex, Ptr<Pack
 		if (m_ecnEnabled){
 			bool egressCongested = m_mmu->ShouldSendCN(ifIndex, qIndex);
 			if (egressCongested) {
-        std::cout << "Switch marks CE" << std::endl;
 				NS_LOG_DEBUG("Switch marks CE");
 				PppHeader ppp;
 				Ipv4Header h;

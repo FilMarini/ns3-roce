@@ -62,6 +62,8 @@ int main(int argc, char *argv[])
 	LogComponentEnable("RdmaNetwork", LOG_LEVEL_INFO);
 	LogComponentEnable("FlowScheduler", LOG_LEVEL_INFO);
 	LogComponentEnable("AgFlowMcastPhase", LOG_LEVEL_INFO);
+	LogComponentEnable("SwitchMmu", LOG_LEVEL_INFO);
+	LogComponentEnable("RdmaReliableQP", LOG_LEVEL_INFO);
 
 	NS_LOG_INFO("=== Logging is enabled ===");
 	

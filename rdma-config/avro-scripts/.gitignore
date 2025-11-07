@@ -1,0 +1,4 @@
+env/
+pfc_analysis/
+*.csv
+*.png
